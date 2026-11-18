@@ -4,7 +4,12 @@ Tarayıcıda çalışan, kurulum gerektirmeyen sade bir satranç saati. Telefonu
 
 ## Özellikler
 
+- **Kurulum ekranı:** Site her açıldığında önce süre, renk ve kimin başlayacağı seçilir. Son seçimler hatırlanır.
 - **İki oyunculu ekran:** Ekran ikiye bölünür, üstteki oyuncunun alanı ters döner ve karşıdaki oyuncu kendi süresini düz okur.
+- **Sırası gelenin alanı büyür:** Sıra kimdeyse onun alanı genişler, rakibinki küçülüp söner.
+- **Renk seçenekleri:**
+  - **Siyah / Beyaz:** Klasik görünüm. Başlayan oyuncu beyaz olur.
+  - **Renkli:** Her oyuncu 12 renkten birini seçer. Rakibin seçtiği renk seçilemez.
 - **Artış seçenekleri:**
   - **Artış yok:** Hamleden sonra süre eklenmez.
   - **Fischer:** Her hamleden sonra belirlenen saniye kadar süre eklenir.
@@ -13,25 +18,27 @@ Tarayıcıda çalışan, kurulum gerektirmeyen sade bir satranç saati. Telefonu
 - **Farklı süreler:** İki oyuncuya ayrı süre verebilirsin (handikap).
 - **Az süre uyarısı:** 10 saniyenin altında süre ondalıklı gösterilir ve oyuncunun alanı yanıp söner.
 - **Hamle sayacı:** Her oyuncunun kaç hamle yaptığı gösterilir.
-- **Ses:** Hamle tıkı ve süre bitiş uyarısı çalar, ayarlardan kapatılabilir.
+- **Ses:** Her hamlede tok bir vuruş sesi, süre bitince alçak bir uyarı çalar. Kurulum ekranından kapatılabilir.
 - **Ekranı açık tutma:** Oyun sırasında ekran kendiliğinden kapanmaz (destekleyen tarayıcılarda).
-- **Ayarları hatırlama:** Son seçilen ayarlar tarayıcıda saklanır.
-- **Siyah, beyaz ve gri** sade tasarım.
 
 ## Kullanım
 
-1. Ortadaki **ayarlar** düğmesinden süreyi seç ve **Uygula**'ya bas.
-2. Siyahları oynayan oyuncu kendi alanına dokunur, beyazın saati başlar.
-3. Her oyuncu hamlesini yaptıktan sonra **kendi alanına dokunur**, böylece rakibin saati başlar.
-4. Süresi biten oyuncunun alanında **"Süre doldu"** yazar.
+1. Siteyi açınca kurulum ekranı gelir:
+   1. **Süre:** Hazır sürelerden birini seç ya da kendin gir.
+   2. **Renk:** "Siyah / Beyaz" ya da "Renkli". Renkli seçersen her oyuncu kendi rengini seçer.
+   3. **Kim başlıyor?:** Üstteki ya da alttaki oyuncu.
+2. **Tamam**'a bas. Başlayacak oyuncunun alanı büyük görünür.
+3. Ekrana dokununca başlayan oyuncunun saati çalışmaya başlar.
+4. Her oyuncu hamlesini yaptıktan sonra **kendi alanına dokunur**, böylece rakibin saati başlar.
+5. Süresi biten oyuncunun alanında **"Süre doldu"** yazar.
 
 ### Düğmeler
 
 | Düğme | İşlev |
 |---|---|
 | ▶ / ⏸ | Başlat, duraklat, devam et |
-| ↺ | Saati sıfırla |
-| ☰ | Ayarlar |
+| ↺ | Aynı ayarlarla yeniden başlat |
+| ☰ | Yeni oyun (kurulum ekranı) |
 
 ### Klavye kısayolları (bilgisayarda)
 
@@ -40,7 +47,7 @@ Tarayıcıda çalışan, kurulum gerektirmeyen sade bir satranç saati. Telefonu
 | `Boşluk` | Sırayı değiştir |
 | `P` | Duraklat / devam et |
 | `R` | Sıfırla |
-| `Esc` | Ayarları kapat |
+| `Esc` | Kurulum ekranını kapat (oyun sırasında açıldıysa) |
 
 ## Telefona kurma
 
