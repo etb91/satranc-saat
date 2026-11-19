@@ -4,12 +4,14 @@ Tarayıcıda çalışan, kurulum gerektirmeyen sade bir satranç saati. Telefonu
 
 ## Özellikler
 
-- **Kurulum ekranı:** Site her açıldığında önce süre, renk ve kimin başlayacağı seçilir. Son seçimler hatırlanır.
+- **Kurulum ekranı:** Site her açıldığında önce süre ve renkler seçilir. Son seçimler hatırlanır.
 - **İki oyunculu ekran:** Ekran ikiye bölünür, üstteki oyuncunun alanı ters döner ve karşıdaki oyuncu kendi süresini düz okur.
 - **Sırası gelenin alanı büyür:** Sıra kimdeyse onun alanı genişler, rakibinki küçülüp söner.
+- **Bekleme ve duraklatma görünümü:** Saat başlamadan önce ve oyun duraklatıldığında iki oyuncunun alanı da küçük ve soluk görünür.
+- **Gerçek saat gibi başlangıç:** İlk hamleyi yapacak oyuncunun saatini rakibi başlatır (satrançta siyah, beyazın saatini başlatır).
 - **Renk seçenekleri:**
-  - **Siyah / Beyaz:** Klasik görünüm. Başlayan oyuncu beyaz olur.
-  - **Renkli:** Her oyuncu 12 renkten birini seçer. Rakibin seçtiği renk seçilemez.
+  - **Siyah / Beyaz:** Klasik görünüm. Sadece hangi oyuncunun beyaz olduğu seçilir, ilk hamleyi her zaman beyaz yapar.
+  - **Renkli:** Her oyuncu 12 renkten birini seçer, ardından kimin başlayacağı seçilir. Rakibin seçtiği renk seçilemez.
 - **Artış seçenekleri:**
   - **Artış yok:** Hamleden sonra süre eklenmez.
   - **Fischer:** Her hamleden sonra belirlenen saniye kadar süre eklenir.
@@ -25,12 +27,14 @@ Tarayıcıda çalışan, kurulum gerektirmeyen sade bir satranç saati. Telefonu
 
 1. Siteyi açınca kurulum ekranı gelir:
    1. **Süre:** Hazır sürelerden birini seç ya da kendin gir.
-   2. **Renk:** "Siyah / Beyaz" ya da "Renkli". Renkli seçersen her oyuncu kendi rengini seçer.
-   3. **Kim başlıyor?:** Üstteki ya da alttaki oyuncu.
-2. **Tamam**'a bas. Başlayacak oyuncunun alanı büyük görünür.
-3. Ekrana dokununca başlayan oyuncunun saati çalışmaya başlar.
+   2. **Renk:**
+      - "Siyah / Beyaz" seçersen, beyazla üstteki mi alttaki mi oyuncunun oynayacağını seç.
+      - "Renkli" seçersen, her oyuncu kendi rengini seçer, sonra kimin başlayacağını seç.
+2. **Tamam**'a bas. İki oyuncunun alanı da küçük ve soluk görünür, saat beklemededir.
+3. **Siyah** (renkli modda başlamayan oyuncu) kendi alanına dokunur, beyazın saati başlar.
 4. Her oyuncu hamlesini yaptıktan sonra **kendi alanına dokunur**, böylece rakibin saati başlar.
-5. Süresi biten oyuncunun alanında **"Süre doldu"** yazar.
+5. Ortadaki ⏸ düğmesiyle oyunu duraklatabilirsin. Duraklatınca iki taraf da soluklaşır, ▶ ile devam edilir.
+6. Süresi biten oyuncunun alanında **"Süre doldu"** yazar.
 
 ### Düğmeler
 

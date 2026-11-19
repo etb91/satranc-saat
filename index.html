@@ -53,7 +53,8 @@
     background: var(--bg-off);
     color: var(--fg-off);
     box-shadow: inset 0 0 0 1px var(--edge-off);
-    transition: flex-grow .3s cubic-bezier(.2, .8, .2, 1), background-color .15s, color .15s, box-shadow .15s;
+    transition: flex-grow .3s cubic-bezier(.2, .8, .2, 1), transform .3s cubic-bezier(.2, .8, .2, 1),
+      opacity .3s, background-color .15s, color .15s, box-shadow .15s;
   }
   .player.top { transform: rotate(180deg); }
   /* Sırası gelen oyuncunun alanı büyür */
@@ -63,11 +64,17 @@
     color: var(--fg-on);
     box-shadow: inset 0 0 0 2px var(--edge-on);
   }
-  .app.paused .player.active {
-    background: var(--bg-off);
-    color: var(--fg-off);
-    box-shadow: inset 0 0 0 1px var(--edge-off);
+  /* Saat başlamadan önce ve duraklatılınca: iki taraf da küçük ve soluk */
+  .app.idle .player {
+    flex-grow: 1;
+    background: var(--bg-on);
+    color: var(--fg-on);
+    box-shadow: inset 0 0 0 2px var(--edge-on);
+    opacity: .5;
+    transform: scale(.9);
   }
+  .app.idle .player.top { transform: rotate(180deg) scale(.9); }
+  .app.idle .player .time { transform: scale(.84); }
   /* Son 10 saniye: alan yanıp söner */
   .player.low::after {
     content: '';
@@ -127,6 +134,8 @@
   @media (orientation: landscape) and (pointer: fine) {
     .app { flex-direction: row; }
     .player.top { transform: none; }
+    .app.idle .player.top { transform: scale(.9); }
+    .mini { flex-direction: row; width: 22px; height: 14px; vertical-align: -2px; }
     .bar { flex-direction: column; padding: 0 2px; }
     .time { font-size: min(12vw, 28vh); }
   }
@@ -231,6 +240,22 @@
     background: conic-gradient(#e53935, #fb8c00, #fdd835, #9ccc65, #2e7d32, #26c6da,
       #1976d2, #283593, #8e24aa, #f06292, #8b1e3f, #e53935);
   }
+  /* Küçük ekran önizlemesi: hangi taraf beyaz, hangisi siyah */
+  .mini {
+    display: inline-flex;
+    flex-direction: column;
+    width: 14px;
+    height: 22px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-right: 10px;
+    vertical-align: -6px;
+    box-shadow: 0 0 0 1px rgba(128, 128, 128, .8);
+  }
+  .mini i { flex: 1; }
+  #whiteSeg button { display: flex; align-items: center; justify-content: center; }
+  .mini .w { background: #fff; }
+  .mini .b { background: #000; }
   .pick-head {
     display: flex;
     justify-content: space-between;
@@ -341,6 +366,14 @@
       <button data-cm="bw"><span class="dot bw"></span>Siyah / Beyaz</button>
       <button data-cm="color"><span class="dot rainbow"></span>Renkli</button>
     </div>
+    <div id="bwPick">
+      <div class="label">Beyazla kim oynuyor?</div>
+      <div class="seg" id="whiteSeg">
+        <button data-white="0"><span class="mini"><i class="w"></i><i class="b"></i></span><span class="txt">Üstteki oyuncu</span></button>
+        <button data-white="1"><span class="mini"><i class="b"></i><i class="w"></i></span><span class="txt">Alttaki oyuncu</span></button>
+      </div>
+      <p class="sub">Satrançta ilk hamleyi her zaman beyaz yapar.</p>
+    </div>
     <div id="colorPick" hidden>
       <div class="pick-head"><span id="cl0">Üstteki oyuncu</span><span class="pick-name" id="cn0"></span></div>
       <div class="swatches" id="sw0"></div>
@@ -348,12 +381,13 @@
       <div class="swatches" id="sw1"></div>
     </div>
 
-    <h3><span class="num">3</span>Kim başlıyor?</h3>
-    <div class="seg" id="starterSeg">
-      <button data-s="0"><span class="chip"></span><span class="txt">Üstteki</span></button>
-      <button data-s="1"><span class="chip"></span><span class="txt">Alttaki</span></button>
+    <div id="starterSection">
+      <h3><span class="num">3</span>Kim başlıyor?</h3>
+      <div class="seg" id="starterSeg">
+        <button data-s="0"><span class="chip"></span><span class="txt">Üstteki</span></button>
+        <button data-s="1"><span class="chip"></span><span class="txt">Alttaki</span></button>
+      </div>
     </div>
-    <p class="sub" id="bwNote">Başlayan oyuncu beyaz olur.</p>
 
     <label class="check sound"><input type="checkbox" id="sound"> Ses</label>
 
@@ -527,7 +561,11 @@
   // Oyuncu p kendi alanına dokundu: hamlesini bitirdi.
   function press(p) {
     if (!st) return;
-    if (st.status === 'ready') { begin(); return; }
+    // Gerçek saatlerdeki gibi: oyunu, başlamayan oyuncu (siyah) saate basarak açar.
+    if (st.status === 'ready') {
+      if (p !== st.active) begin();
+      return;
+    }
     if (st.status !== 'running' || st.active !== p) return;
     tick();
     if (st.status !== 'running') return;
@@ -603,8 +641,8 @@
 
   function hintFor(p) {
     switch (st.status) {
-      case 'ready': return p === st.active ? 'Başlamak için dokun' : 'Rakibin başlayacak';
-      case 'paused': return p === st.active ? 'Duraklatıldı' : '';
+      case 'ready': return p === st.active ? 'Rakibin dokununca süren başlar' : 'Saati başlatmak için dokun';
+      case 'paused': return 'Duraklatıldı';
       case 'over': return p === st.loser ? 'Süre doldu' : 'Kazandı';
       default: return '';
     }
@@ -612,7 +650,7 @@
 
   function render() {
     if (!st) return;
-    app.classList.toggle('paused', st.status === 'paused');
+    app.classList.toggle('idle', st.status === 'ready' || st.status === 'paused');
     for (const p of [0, 1]) {
       renderPlayer(p);
       hintEls[p].textContent = hintFor(p);
@@ -829,14 +867,8 @@
     const t1 = draft.split ? readTime(f.min1, f.sec1) : t0;
     if (t0 <= 0 || t1 <= 0) out.push('süre');
     if (draft.colorMode === 'color' && (draft.colors[0] == null || draft.colors[1] == null)) out.push('renkler');
-    if (draft.starter == null) out.push('başlayan oyuncu');
+    if (draft.starter == null) out.push(draft.colorMode === 'bw' ? 'beyaz oyuncu' : 'başlayan oyuncu');
     return out;
-  }
-
-  function chipColor(p) {
-    if (draft.colorMode === 'color') return draft.colors[p] == null ? null : COLORS[draft.colors[p]].hex;
-    if (draft.starter == null) return null;
-    return p === draft.starter ? '#fff' : '#000';
   }
 
   function renderSetup() {
@@ -872,17 +904,25 @@
       }
     }
 
-    // 3 · Kim başlıyor
+    // Siyah/Beyaz: beyaz her zaman başlar, sadece beyazın kim olduğu sorulur
+    $('#bwPick').hidden = draft.colorMode !== 'bw';
+    for (const b of $$('#whiteSeg button')) {
+      const p = +b.dataset.white;
+      b.classList.toggle('on', p === draft.starter);
+      b.querySelector('.txt').textContent = `${names[p]} oyuncu`;
+    }
+
+    // 3 · Kim başlıyor (yalnızca renkli modda)
+    $('#starterSection').hidden = draft.colorMode !== 'color';
     for (const b of $$('#starterSeg button')) {
       const p = +b.dataset.s;
       b.classList.toggle('on', p === draft.starter);
       b.querySelector('.txt').textContent = names[p];
       const chip = b.querySelector('.chip');
-      const col = chipColor(p);
+      const col = draft.colors[p] == null ? null : COLORS[draft.colors[p]].hex;
       chip.hidden = !col;
       if (col) chip.style.background = col;
     }
-    $('#bwNote').hidden = draft.colorMode !== 'bw';
 
     const miss = missingItems();
     $('#missing').hidden = miss.length === 0;
@@ -938,6 +978,13 @@
     const b = e.target.closest('button');
     if (!b) return;
     draft.starter = +b.dataset.s;
+    renderSetup();
+  });
+  // Siyah/Beyaz modunda "başlayan" = beyaz oyuncu
+  $('#whiteSeg').addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    draft.starter = +b.dataset.white;
     renderSetup();
   });
   setup.addEventListener('input', renderSetup);
